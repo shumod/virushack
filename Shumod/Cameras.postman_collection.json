@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "12be54e6-90e4-4169-8e3c-f09d791597f3",
+		"name": "Cameras",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "hack",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "aton",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"ip\": \"1.1.1.1\"}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5556/check",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5556",
+					"path": [
+						"check"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
