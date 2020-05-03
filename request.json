@@ -1,0 +1,8 @@
+{
+  "request": [
+    {
+      "camera_ip": "1.11.1.1",
+      "camera_port": "9999"
+    }
+  ]
+}
