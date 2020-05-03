@@ -1,0 +1,46 @@
+{
+	"info": {
+		"_postman_id": "c73543e7-5626-4fa1-b2a8-265a39a434e4",
+		"name": "VirusHack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "To camera example",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/cameras/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"cameras",
+						"2"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"id": 2,
+					"camera_ip": "1.11.1.3",
+					"camera_port": "99997"
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}
