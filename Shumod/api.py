@@ -30,13 +30,16 @@ def not_found(error):
 @app.route('/check', methods=['POST'])
 @auth.login_required
 def check():
+    if not request.json:
+        abort(400, description="Request not found")
+
     #Проверяем протокол в запросе
-    if not request.json or not 'protocol' in request.json:
+    if not 'protocol' in request.json:
         abort(400, description="Protocol not found")
     protocol = request.json.get('protocol')
 
     # Проверяем ip адрес камеры в запросе
-    if not request.json or not 'ip' in request.json:
+    if not 'ip' in request.json:
         abort(400, description="IP not found")
 
     ip = request.json.get('ip')
@@ -44,27 +47,30 @@ def check():
         abort(400, description="IP is not correct")
 
     # Проверяем порт камеры в запросе
-    if not request.json or not 'port' in request.json:
+    if not 'port' in request.json:
         abort(400, description="Port not found")
     port = request.json.get('port')
     if not isinstance(port, int):
         abort(400, description="Port must be integer")
 
     # Проверяем путь до видео в запросе
-    if not request.json or not 'path' in request.json:
+    if not 'path' in request.json:
         path = ''
     else:
         path = '/{0}'.format(request.json.get('path'))
 
-    source = '{0}://{1}:{2}{3}'.format(protocol, ip, port, path)
+    userpass = ''
+    if 'user' in request.json and 'pass' in request.json:
+        userpass = '{0}:{1}@'.format(request.json.get('user'), request.json.get('pass'))
+
+    source = '{0}://{1}{2}:{3}{4}'.format(protocol, userpass, ip, port, path)
 
     data = {'ip': ip, 'port': port, 'protocol': protocol, 'source': source}
 
     #Проверяем камеру на доступность
     check = video.Checks(source)
-    if not check:
+    if not check.testDevice():
         data['error'] = 'Camera is not available'
-        return data
 
     return data
 
