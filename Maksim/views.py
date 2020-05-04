@@ -12,7 +12,11 @@ from flask import Flask
 @app.route('/')
 @app.route('/video_feed')
 def cam():
-    capture = cv2.VideoCapture(0)
+    # пример
+    # scr='http://login:pass@IP/vidieo.cgi'
+    # или с камеры компа сразу
+    src = 0
+    capture = cv2.VideoCapture(scr)
     frame = capture.read()[1]
     cnt = cv2.imencode('.png',frame)[1]
     b64 = base64.b64encode(cnt).decode()
