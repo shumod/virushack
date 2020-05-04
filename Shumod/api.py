@@ -1,36 +1,41 @@
 from flask import Flask, jsonify, abort, request, make_response, url_for
 from flask_httpauth import HTTPBasicAuth
 import sys
+from Shumod import video
 
 app = Flask(__name__, static_url_path="")
 auth = HTTPBasicAuth()
 
-
+#Авторизация с именем-паролем
 @auth.get_password
 def get_password(username):
     if username == 'hack':
         return 'aton'
     return None
 
-
+#Обработка ошибок
 @auth.error_handler
 def unauthorized():
     return make_response(jsonify({'error': 'Unauthorized access'}), 403)
-
 
 @app.errorhandler(400)
 def not_found(error):
     return jsonify(error=str(error)), 400
 
-
 @app.errorhandler(404)
 def not_found(error):
     return jsonify(error=str(error)), 404
 
-
+#Роут для проверки камеры
 @app.route('/check', methods=['POST'])
 @auth.login_required
 def check():
+    #Проверяем протокол в запросе
+    if not request.json or not 'protocol' in request.json:
+        abort(400, description="Protocol not found")
+    protocol = request.json.get('protocol')
+
+    # Проверяем ip адрес камеры в запросе
     if not request.json or not 'ip' in request.json:
         abort(400, description="IP not found")
 
@@ -38,15 +43,33 @@ def check():
     if not validate_ip(ip):
         abort(400, description="IP is not correct")
 
+    # Проверяем порт камеры в запросе
     if not request.json or not 'port' in request.json:
         abort(400, description="Port not found")
     port = request.json.get('port')
     if not isinstance(port, int):
         abort(400, description="Port must be integer")
 
-    return {'ip': ip, 'port': port}
+    # Проверяем путь до видео в запросе
+    if not request.json or not 'path' in request.json:
+        path = ''
+    else:
+        path = '/{0}'.format(request.json.get('path'))
+
+    source = '{0}://{1}:{2}{3}'.format(protocol, ip, port, path)
+
+    data = {'ip': ip, 'port': port, 'protocol': protocol, 'source': source}
+
+    #Проверяем камеру на доступность
+    check = video.Checks(source)
+    if not check:
+        data['error'] = 'Camera is not available'
+        return data
+
+    return data
 
 
+#Валидация ip адреса
 def validate_ip(s):
     a = s.split('.')
     if len(a) != 4:
