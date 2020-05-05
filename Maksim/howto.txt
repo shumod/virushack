@@ -1,0 +1,6 @@
+Для тестов
+локально 
+проверте номер порта Flask
+curl -i -X POST -H "Content-Type: application/json" -d "{\"protocol\":\"http\",\"ip\":\"192.168.199.108\",\"port\":\"80\",\"path\":\"/video/mjpg.cgi\",\"user\":\"admin\",\"pass\":\"Qq123321\"}" http://localhost:5000/check --user admin:admin
+через сеть
+curl -i -X POST -H "Content-Type: application/json" -d "{\"protocol\":\"rtsp\",\"ip\":\"3.84.6.190\",\"port\":\"80\",\"path\":\"/vod/mp4:BigBuckBunny_115k.mov\",\"user\":\"\",\"pass\":\"\"}" http://localhost:5000/check --user admin:admin
